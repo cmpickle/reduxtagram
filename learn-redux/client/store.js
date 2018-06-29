@@ -1,12 +1,16 @@
-import { createStore, compose } from 'redux';
+import { createStore, compose, applyMiddleware } from 'redux';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { browserHistory } from 'react-router';
+import createSagaMiddleware from 'redux-saga';
 
-// Import the root reducer
+import { watcherSaga } from './sagas';
 import rootReducer from './reducers/index';
 
 import comments from './data/comments';
 import posts from './data/posts';
+import { watcherSaga } from './sagas';
+
+const sagaMiddleware = createSagaMiddleware();
 
 // Create an object for the default data
 const defaultState = {
@@ -18,7 +22,14 @@ const enhancers = compose(
     window.devToolsExtension ? window.devToolsExtension() : f => f
 );
 
-const store = createStore(rootReducer, defaultState, enhancers);
+const store = createStore(
+    rootReducer, 
+    defaultState, 
+    enhancers,
+    applyMiddleware(sagaMiddleware)
+);
+
+sagaMiddleware.run(watcherSaga);
 
 export const history = syncHistoryWithStore(browserHistory, store);
 
