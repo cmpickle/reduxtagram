@@ -17,6 +17,10 @@ module.exports = {
     new webpack.NoErrorsPlugin()
   ],
   resolve: {
+    alias: {
+      components: path.resolve(__dirname, 'learn-redux/components'),
+      styles: path.resolve(__dirname, 'learn-redux/styles'),
+    },
     extensions: ['', '.js', '.jsx']
   },
   module: {
@@ -28,8 +32,8 @@ module.exports = {
       include: path.join(__dirname, 'client')
     },
     // CSS
-    { 
-      test: /\.styl$/, 
+    {
+      test: /\.styl$/,
       include: path.join(__dirname, 'client'),
       loader: 'style-loader!css-loader!stylus-loader'
     }
